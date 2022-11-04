@@ -10,6 +10,12 @@ app.secret_key = "dev"
 
 API_KEY = os.environ["NEWS_API_KEY"]
 
+@app.route("/")
+def login():
+    """Returns login page."""
+
+    return render_template('index.html')
+
 if __name__ == "__main__":
     connect_to_db(app)
     app.run(host="0.0.0.0", debug=True)
