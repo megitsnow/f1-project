@@ -13,7 +13,7 @@ from drivers import driver_data
 
 
 os.system("dropdb f1")
-os.system("createdb f1v1")
+os.system("createdb f1")
 
 model.connect_to_db(server.app)
 model.db.create_all()
@@ -25,7 +25,7 @@ for n in range(10):
 
     user = crud.create_user(email, password)
     model.db.session.add(user)
-
+    
 model.db.session.commit()
 
 driver_in_db = []
@@ -42,7 +42,6 @@ for i in driver_data.keys():
         driver_data[i]["url"],
         driver_data[i]["img"],
     )
-    
     db_driver = crud.create_driver(driver_api_ref, number, code, forename, surname, dob, nationality, url, img_url)
     driver_in_db.append(db_driver)
 
