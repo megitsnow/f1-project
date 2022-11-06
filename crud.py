@@ -1,6 +1,6 @@
 """CRUD operations."""
 
-from model import db, User, Driver, connect_to_db
+from model import db, User, Driver, Race, connect_to_db
 
 def create_user(email, password):
     """Create and return a new user."""
@@ -30,6 +30,31 @@ def create_driver(driver_api_ref, number, code, forename, surname, dob, national
     )
 
     return driver
+
+def create_race(year, round, circuit_id, name, date, time, url , fp1_date, fp1_time, fp2_date, fp2_time, fp3_date, fp3_time, quali_date, quali_time, sprint_date, sprint_time):
+    """Create and return a new driver."""
+
+    race = Race(
+        year=year,
+        round=round,
+        circuit_id=circuit_id,
+        name=name,
+        date = date,
+        time = time,
+        url = url,
+        fp1_date = fp1_date,
+        fp1_time = fp1_time,
+        fp2_date = fp2_date,
+        fp2_time = fp2_time,
+        fp3_date = fp3_date,
+        fp3_time = fp3_time,
+        quali_date = quali_date,
+        quali_time = quali_time,
+        sprint_date = quali_date,
+        sprint_time = quali_time,
+    )
+
+    return race
 
 if __name__ == "__main__":
     from server import app

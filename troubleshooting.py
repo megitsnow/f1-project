@@ -1,24 +1,34 @@
-from drivers import driver_data
+from parsed_data import races
 import crud
 
-driver_in_db = []
+print(races.items())
 
-print(driver_data["1"]["driverRef"])
+races_in_db = []
 
-for i in driver_data.keys():
-    driver_api_ref, number, code, forename, surname, dob, nationality, url, img_url = (
-        driver_data[i]["driverRef"],
-        driver_data[i]["number"],
-        driver_data[i]["code"],
-        driver_data[i]["forename"],
-        driver_data[i]["surname"],
-        driver_data[i]["dob"],
-        driver_data[i]["nationality"],
-        driver_data[i]["url"],
-        driver_data[i]["img"],
+
+
+for i in races.keys():
+    year, round, circuit_id, name, date, time, url , fp1_date, fp1_time, fp2_date, fp2_time, fp3_date, fp3_time, quali_date, quali_time, sprint_date, sprint_time = (
+        races[i]["year"],
+        races[i]["round"],
+        races[i]["circuit_id"],
+        races[i]["name"],
+        races[i]["date"],
+        races[i]["time"],
+        races[i]["url"],
+        races[i]["fp1_date"],
+        races[i]["fp1_time"],
+        races[i]["fp2_date"],
+        races[i]["fp2_time"],
+        races[i]["fp3_date"],
+        races[i]["fp3_time"],
+        races[i]["quali_date"],
+        races[i]["quali_time"],
+        races[i]["sprint_date"],
+        races[i]["sprint_time"]
     )
 
-    db_driver = crud.create_driver(driver_api_ref, number, code, forename, surname, dob, nationality, url, img_url)
-    driver_in_db.append(db_driver)
+    db_race = crud.create_race(year, round, circuit_id, name, date, time, url , fp1_date, fp1_time, fp2_date, fp2_time, fp3_date, fp3_time, quali_date, quali_time, sprint_date, sprint_time)
+    races_in_db.append(db_race)
 
-print(driver_in_db)
+print(races_in_db)

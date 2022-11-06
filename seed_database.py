@@ -9,7 +9,7 @@ import sys
 import crud
 import model
 import server
-from drivers import driver_data
+from parsed_data import driver_data, races
 
 
 os.system("dropdb f1")
@@ -27,6 +27,8 @@ for n in range(10):
     model.db.session.add(user)
     
 model.db.session.commit()
+
+# Seed drivers table 
 
 driver_in_db = []
 
@@ -48,5 +50,34 @@ for i in driver_data.keys():
 model.db.session.add_all(driver_in_db)
 model.db.session.commit()
 
-print(driver_in_db)
+# Seed races table
+
+races_in_db = []
+
+for i in races.keys():
+    year, round, circuit_id, name, date, time, url , fp1_date, fp1_time, fp2_date, fp2_time, fp3_date, fp3_time, quali_date, quali_time, sprint_date, sprint_time = (
+        races[i]["year"],
+        races[i]["round"],
+        races[i]["circuit_id"],
+        races[i]["name"],
+        races[i]["date"],
+        races[i]["time"],
+        races[i]["url"],
+        races[i]["fp1_date"],
+        races[i]["fp1_time"],
+        races[i]["fp2_date"],
+        races[i]["fp2_time"],
+        races[i]["fp3_date"],
+        races[i]["fp3_time"],
+        races[i]["quali_date"],
+        races[i]["quali_time"],
+        races[i]["sprint_date"],
+        races[i]["sprint_time"]
+    )
+
+    db_race = crud.create_race(year, round, circuit_id, name, date, time, url , fp1_date, fp1_time, fp2_date, fp2_time, fp3_date, fp3_time, quali_date, quali_time, sprint_date, sprint_time)
+    races_in_db.append(db_race)
+
+model.db.session.add_all(races_in_db)
+model.db.session.commit()
 

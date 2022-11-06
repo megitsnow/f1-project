@@ -18,7 +18,7 @@ class User(db.Model):
         return f"<User user_id={self.user_id} email={self.email}>"
 
 class Driver(db.Model):
-    """A storage space."""
+    """Information on Drivers"""
 
     __tablename__ = "drivers"
 
@@ -35,6 +35,35 @@ class Driver(db.Model):
 
     def __repr__(self):
         return f"<Driver driver_id={self.driver_id} surname={self.surname}>"
+
+class Race(db.Model):
+    """F1 Race information"""
+
+    __tablename__ = "races"
+
+    race_id = db.Column(db.Integer, autoincrement = True, primary_key=True)
+    year = db.Column(db.Integer)
+    round = db.Column(db.Integer)
+    circuit_id = db.Column(db.Integer)
+    name = db.Column(db.String(255))
+    date = db.Column(db.String(255))
+    time = db.Column(db.String(255)) 
+    url = db.Column(db.String(255))
+    fp1_date = db.Column(db.String(255))
+    fp1_time = db.Column(db.String(255))
+    fp2_date = db.Column(db.String(255))
+    fp2_time = db.Column(db.String(255))
+    fp3_date = db.Column(db.String(255))
+    fp3_time = db.Column(db.String(255))
+    quali_date = db.Column(db.String(255))
+    quali_time = db.Column(db.String(255))
+    sprint_date = db.Column(db.String(255))
+    sprint_time = db.Column(db.String(255))
+
+
+    def __repr__(self):
+        return f"<Race race_id={self.race_id} name={self.name}>"
+
 
 def connect_to_db(flask_app, db_uri="postgresql:///f1", echo=True):
     flask_app.config["SQLALCHEMY_DATABASE_URI"] = db_uri

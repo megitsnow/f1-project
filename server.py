@@ -21,8 +21,10 @@ def login():
 def handle_login():
     """Create a new user."""
 
-    email = request.json["email"]
-    password = request.json["password"]
+    email = request.form.get("email")
+    print(email)
+    print("***************************************************")
+    password = request.form.get("password")
 
     user = crud.get_user_by_email(email)
 
