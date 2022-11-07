@@ -20,10 +20,12 @@ model.db.create_all()
 
 # Create 10 users; each user will make 10 ratings
 for n in range(10):
+    fname = f'user{n}'
+    lname = 'test'
     email = f"user{n}@test.com"  
     password = "test"
 
-    user = crud.create_user(email, password)
+    user = crud.create_user(fname, lname, email, password)
     model.db.session.add(user)
     
 model.db.session.commit()

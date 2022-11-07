@@ -1,19 +1,33 @@
 function App () {
-    const [logInUser, setlogInUser] = React.useState("");
-
-    React.useEffect(() => {
-        fetch('/handle_login', {
-            method: 'POST',
-        })
-            .then((response) => response.json())
-            .then((result) => {
-            setlogInUser(result)
-            });
-        }, []);
+    const [formData, setFormData] = React.useState({
+        fname: "",
+        lname: '',
+        email: "",
+        password: "",
+        passwordConfirm: "",
+    })
+    
+    function handleChange(event) {
+        const {name, value} = event.target
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            [name]: value
+        }))
+    }
+    
+    function handleSubmit(event) {
+        event.preventDefault()
+        if(formData.password === formData.passwordConfirm) {
+            alert("Successfully signed up")
+        } else {
+            alert("Passwords do not match")
+            return
+        } }
+        
 
     return (
     <div>
-        {logInUser ? <Welcome/> : <Login/>}
+        <Login formData = {formData} handleChange = {handleChange} handleSubmit = {handleSubmit}/> 
     </div>  
     );
 }
