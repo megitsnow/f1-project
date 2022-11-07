@@ -1,4 +1,6 @@
 function App () {
+    const[signUp, setSignUp] = React.useState(false);
+
     const [formData, setFormData] = React.useState({
         fname: "",
         lname: '',
@@ -19,6 +21,7 @@ function App () {
         event.preventDefault()
         if(formData.password === formData.passwordConfirm) {
             alert("Successfully signed up")
+            setSignUp(true)
         } else {
             alert("Passwords do not match")
             return
@@ -27,7 +30,7 @@ function App () {
 
     return (
     <div>
-        <Login formData = {formData} handleChange = {handleChange} handleSubmit = {handleSubmit}/> 
+        {signUp ? <Homepage/> : <SignUpForm formData = {formData} handleChange = {handleChange} handleSubmit = {handleSubmit}/>}
     </div>  
     );
 }

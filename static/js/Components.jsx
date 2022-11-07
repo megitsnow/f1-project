@@ -1,4 +1,4 @@
-function Login(props) {
+function SignUpForm(props) {
     const {formData, handleChange, handleSubmit} = props;
     return (
         <div>
