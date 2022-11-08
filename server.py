@@ -17,16 +17,18 @@ def login():
 
     return render_template('index.html')
 
-@app.route("/handle_login", methods=["POST"])
+@app.route("/api/sign-up", methods=["POST"])
 def handle_login():
     """Create a new user."""
+    fname = request.json.get("fname")
+    lname = request.json.get("lname")
+    email = request.json.get("email")
+    password = request.json.get("password")
 
-    email = request.form.get("email")
-    print(email)
-    print("***************************************************")
-    password = request.form.get("password")
+    user = crud.create_user(fname = fname, lname = lname, email = email, password = password)
+    db.session.add(user)
+    db.session.commit()
 
-    user = crud.get_user_by_email(email)
 
     return jsonify(user)
         

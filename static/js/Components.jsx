@@ -47,6 +47,35 @@ function SignUpForm(props) {
     );
     }
 
+function LogIn(props) {
+    const {logInData, handleLogInChange, handleLogInSubmit} = props;
+    return (
+        <div>
+        <form className="form" onSubmit={handleLogInSubmit}>
+            <input 
+                type="email" 
+                placeholder="Email address"
+                name="email"
+                onChange={handleLogInChange}
+                value={logInData.email}
+            />
+            <input 
+                type="password" 
+                placeholder="Password"
+                name="password"
+                onChange={handleLogInChange}
+                value={logInData.password}
+            /> 
+            <ReactRouterDOM.Link to="/sign-up">Not A User? Sign Up</ReactRouterDOM.Link>    
+            <button>
+                Sign In
+            </button>
+        </form>
+    </div>
+    );
+    }
+
+
 function Homepage(props) {
     return (
         <div>
