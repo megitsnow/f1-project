@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
+from json import JSONEncoder
 
 db = SQLAlchemy()
 
@@ -16,6 +17,13 @@ class User(db.Model):
     email = db.Column(db.String, unique=True)
     password = db.Column(db.String)
 
+    def to_dict(self):
+        return {'user_id': self.user_id,
+                'fname': self.fname,
+                'lname': self.lname,
+                'email': self.email,
+                'password': self.password}
+
     def __repr__(self):
         return f"<User user_id={self.user_id} email={self.email}>"
 
@@ -24,7 +32,7 @@ class Driver(db.Model):
 
     __tablename__ = "drivers"
 
-    driver_id = db.Column(db.Integer, primary_key=True, autoincrement = True, nullable = False)
+    driver_id = db.Column(db.Integer, primary_key=True, nullable = False)
     driver_api_ref = db.Column(db.String(255), unique = True)
     number = db.Column(db.String, nullable = True)
     code = db.Column(db.String(3), nullable = True)
@@ -34,6 +42,20 @@ class Driver(db.Model):
     nationality = db.Column(db.String(255), nullable = True) 
     url = db.Column(db.String(255), nullable = False)
     img_url = db.Column(db.String(400), nullable = False)
+    active = db.Column(db.Boolean, nullable = True, default = False)
+
+    def to_dict(self):
+        return {'driver_id': self.driver_id,
+                'driver_api_ref': self.driver_api_ref,
+                'number': self.number,
+                'code': self.code,
+                'forename': self.forename,
+                'surname': self.surname,
+                'dob': self.dob,
+                'nationality': self.nationality,
+                'url': self.url,
+                'img_url': self.img_url,
+                'active': self.active,}
 
     def __repr__(self):
         return f"<Driver driver_id={self.driver_id} surname={self.surname}>"
@@ -65,6 +87,29 @@ class Race(db.Model):
 
     def __repr__(self):
         return f"<Race race_id={self.race_id} name={self.name}>"
+
+class Constructor(db.Model):
+    """Information on Drivers"""
+
+    __tablename__ = "constructors"
+
+    constructor_id = db.Column(db.Integer, primary_key=True,nullable = False)
+    constructor_api_ref = db.Column(db.String(300), nullable = False)
+    name = db.Column(db.String(255))
+    nationality = db.Column(db.String(300))
+    url = db.Column(db.String(300))
+    img = db.Column(db.String(300), nullable = True)
+
+    def to_dict(self):
+        return {'constructor_id': self.constructor_id,
+                'constructor_api_ref': self.constructor_api_ref,
+                'name': self.name,
+                'nationality': self.nationality,
+                'url': self.url,
+                'img': self.img,}
+
+    def __repr__(self):
+        return f"<Constructor constructor_id={self.constructor_id} name={self.name}>"
 
 
 def connect_to_db(flask_app, db_uri="postgresql:///f1", echo=True):

@@ -1,86 +1,63 @@
-function App () {
-    const[logIn, setLogIn] = React.useState(false);
-    const[signUp, setSignUp] = React.useState(false);
-
-    const [logInData, setLogInData] = React.useState({
-        email: "",
-        password: "",
-    })
-
-    const [formData, setFormData] = React.useState({
-        fname: "",
-        lname: '',
-        email: "",
-        password: "",
-        passwordConfirm: "",
-    })
+function App () {   
     
-    function handleLogInChange(event) {
-        const {name, value} = event.target
-        setFormData(prevLogInData => ({
-            ...prevLogInData,
-            [name]: value
-        }))
-    }
+    const [constructorData, setConstructorData] = React.useState({});
+    const [activeDriverData, setActiveDriverData] = React.useState({});
 
-    function handleChange(event) {
-        const {name, value} = event.target
-        setLogIn(prevFormData => ({
-            ...prevFormData,
-            [name]: value
-        }))
-    }
-    
-    function handleSubmit(event) {
-        event.preventDefault()
-        if(formData.password === formData.passwordConfirm) {
-            alert("Successfully signed up")
-            setSignUp(true)
-            React.useEffect(() => {
-                fetch('/api/sign-up', {
-                    method: 'POST',
-                    body: JSON.stringify(logInData),
-                    headers: {
-                    'Content-Type': 'application/json',
-                    },
-                })
-                    .then((response) => response.json())
-                    .then((responseJson) => {
-                    alert(responseJson.status);
-                    });
-                }, []);
-        } else {
-            alert("Passwords do not match")
-            return
-        } }
+    React.useEffect(() => {
+        fetch('/api/constructors')
+            .then((response) => response.json())
+            .then((constructorLogoData) => {
+            setConstructorData(constructorLogoData);
+            });
+        }, []);
 
-    function handleLogInSubmit(event) {
-        event.preventDefault()
-        if(formData.password === 'hello') {
-            alert("Successfully logged in")
-            setLogIn(true)
-        } else {
-            alert("Passwords do not match")
-            return
-        } }
-        
+        console.log(constructorData)
+
+    React.useEffect(() => {
+        fetch('/api/active_drivers')
+            .then((response) => response.json())
+            .then((activeDriverData) => {
+            setActiveDriverData(activeDriverData);
+            });
+        }, []);
+
+        console.log("Line 25", activeDriverData)
 
     return (
     <div>
         <ReactRouterDOM.BrowserRouter>
-            <ReactRouterDOM.Route exact path="/">
-                <LogIn logInData = {logInData} handleLogInChange = {handleLogInChange} handleLogInSubmit = {handleLogInSubmit}/>
+        <Navbar logo="https://upload.wikimedia.org/wikipedia/commons/3/33/F1.svg" brand="F1" />
+            
+            <ReactRouterDOM.Route exact path="/log-in">
+                <LogIn/>
             </ReactRouterDOM.Route>
+
             <ReactRouterDOM.Route exact path="/sign-up">
-                <SignUpForm formData = {formData} handleChange = {handleChange} handleSubmit = {handleSubmit}/>
+                <SignUpForm />
+            </ReactRouterDOM.Route >
+
+            <ReactRouterDOM.Route exact path="/">
+                <HomePage/>
             </ReactRouterDOM.Route>
-            {/* <ReactRouterDOM.Route exact path="/homepage">
-                {logIn ? <Homepage/> : <ReactRouterDOM.Redirect to="/login"/> }
-            </ReactRouterDOM.Route> */}
+
+            <ReactRouterDOM.Route exact path="/drivers">
+                <Drivers activeDriverData = {activeDriverData}/>
+            </ReactRouterDOM.Route >
+
+            <ReactRouterDOM.Route exact path="/constructors">
+                <Constructors constructorData = {constructorData}/>
+            </ReactRouterDOM.Route >
+
+            <ReactRouterDOM.Route path="/constructors/:constructorId">
+                <ConstructorDetails/>
+            </ReactRouterDOM.Route >
+            
+            <ReactRouterDOM.Route exact path="/recent-news">
+                <RecentNews />
+            </ReactRouterDOM.Route >
         </ReactRouterDOM.BrowserRouter>
     </div>  
     );
 }
 
 ReactDOM.render(<App />, document.querySelector('#root'));
-

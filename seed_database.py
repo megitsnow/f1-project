@@ -9,7 +9,7 @@ import sys
 import crud
 import model
 import server
-from parsed_data import driver_data, races
+from parsed_data import driver_data, races, constructor_data
 
 
 os.system("dropdb f1")
@@ -35,7 +35,8 @@ model.db.session.commit()
 driver_in_db = []
 
 for i in driver_data.keys():
-    driver_api_ref, number, code, forename, surname, dob, nationality, url, img_url = (
+    driver_id, driver_api_ref, number, code, forename, surname, dob, nationality, url, img_url = (
+        i,
         driver_data[i]["driverRef"],
         driver_data[i]["number"],
         driver_data[i]["code"],
@@ -46,7 +47,7 @@ for i in driver_data.keys():
         driver_data[i]["url"],
         driver_data[i]["img"],
     )
-    db_driver = crud.create_driver(driver_api_ref, number, code, forename, surname, dob, nationality, url, img_url)
+    db_driver = crud.create_driver(driver_id, driver_api_ref, number, code, forename, surname, dob, nationality, url, img_url)
     driver_in_db.append(db_driver)
 
 model.db.session.add_all(driver_in_db)
@@ -81,5 +82,21 @@ for i in races.keys():
     races_in_db.append(db_race)
 
 model.db.session.add_all(races_in_db)
+model.db.session.commit()
+
+constructor_in_db = []
+
+for i in constructor_data.keys():
+    constructor_id, constructor_api_ref, name, nationality, url = (
+        i,
+        constructor_data[i]["constructorRef"],
+        constructor_data[i]["name"],
+        constructor_data[i]["nationality"],
+        constructor_data[i]["url"]
+    )
+    db_constructor = crud.create_constructor(constructor_id, constructor_api_ref, name, nationality, url)
+    constructor_in_db.append(db_constructor)
+
+model.db.session.add_all(constructor_in_db)
 model.db.session.commit()
 

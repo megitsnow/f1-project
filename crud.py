@@ -1,6 +1,6 @@
 """CRUD operations."""
 
-from model import db, User, Driver, Race, connect_to_db
+from model import db, User, Driver, Race, Constructor, connect_to_db
 
 def create_user(fname, lname, email, password):
     """Create and return a new user."""
@@ -14,10 +14,11 @@ def get_user_by_email(email):
 
     return User.query.filter(User.email == email).first()
 
-def create_driver(driver_api_ref, number, code, forename, surname, dob, nationality, url, img_url):
+def create_driver(driver_id, driver_api_ref, number, code, forename, surname, dob, nationality, url, img_url):
     """Create and return a new driver."""
 
     driver = Driver(
+        driver_id = driver_id,
         driver_api_ref=driver_api_ref,
         number=number,
         code=code,
@@ -55,6 +56,24 @@ def create_race(year, round, circuit_id, name, date, time, url , fp1_date, fp1_t
     )
 
     return race
+
+def create_constructor(constructor_id, constructor_api_ref, name, nationality, url):
+    """Create and return a new driver."""
+
+    constructor = Constructor(
+        constructor_id = constructor_id,
+        constructor_api_ref= constructor_api_ref,
+        name=name,
+        nationality=nationality,
+        url=url,
+    )
+
+    return constructor
+
+def get_constructor_by_id(id):
+    """Return a user by email."""
+
+    return Constructor.query.filter(Constructor.constructor_id == id).first()
 
 if __name__ == "__main__":
     from server import app
