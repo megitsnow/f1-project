@@ -1,16 +1,22 @@
-from parsed_data import driver_data, races, constructor_data
-import model 
-import crud
+import requests 
+import os
 
-# constructor_list = []
-# for i in constructor_data.keys():
-#     constructor_api_ref, name, nationality, url = (
-#         constructor_data[i]["constructorRef"],
-#         constructor_data[i]["name"],
-#         constructor_data[i]["nationality"],
-#         constructor_data[i]["url"]
-#     )
+API_KEY = os.environ["NEWS_API_KEY"]
 
-#     db_constructor = crud.create_constructor(constructor_api_ref, name, nationality, url)
+url =f'https://newsapi.org/v2/everything?q=F1 Racing&from=2022-10-30&sortBy=popularity&apiKey={API_KEY}'
 
-print(constructor_data.keys())
+response = requests.get(url)
+data = response.json()
+news_list = data['articles']
+
+news_articles = []
+
+for i in range(len(news_list)):
+    article= {
+    "title": data['articles'][i]['title'],
+    "description": data['articles'][i]['description'],
+    "url": data['articles'][i]['url'],
+    "url_to_img": data['articles'][i]['urlToImage']
+    }
+    news_articles.append(article)
+

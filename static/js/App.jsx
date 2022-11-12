@@ -2,6 +2,7 @@ function App () {
     
     const [constructorData, setConstructorData] = React.useState({});
     const [activeDriverData, setActiveDriverData] = React.useState({});
+    const [recentNewsData, setRecentNewsData] = React.useState([]);
 
     React.useEffect(() => {
         fetch('/api/constructors')
@@ -11,7 +12,6 @@ function App () {
             });
         }, []);
 
-        console.log(constructorData)
 
     React.useEffect(() => {
         fetch('/api/active_drivers')
@@ -21,7 +21,16 @@ function App () {
             });
         }, []);
 
-        console.log("Line 25", activeDriverData)
+    React.useEffect(() => {
+        fetch('/api/recent-news')
+            .then((response) => response.json())
+            .then((recentNewsData) => {
+            setRecentNewsData(recentNewsData);
+            });
+        }, []);
+
+    console.log("LINE 32 - News", recentNewsData)
+
 
     return (
     <div>
@@ -53,7 +62,7 @@ function App () {
             </ReactRouterDOM.Route >
             
             <ReactRouterDOM.Route exact path="/recent-news">
-                <RecentNews />
+                <RecentNews recentNewsData = {recentNewsData}/>
             </ReactRouterDOM.Route >
         </ReactRouterDOM.BrowserRouter>
     </div>  

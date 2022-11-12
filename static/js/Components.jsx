@@ -90,7 +90,7 @@ function LogIn(props) {
     })
 
     const handleChange = (event) => {
-        console.log(logInData)
+        console.log("Line 93 Log in", logInData)
         const {name, value} = event.target
         setLogInData(prevLogInData => ({
             ...prevLogInData,
@@ -173,6 +173,7 @@ return (
     );
 }
 
+// Homepage
 
 function HomePage(props) {
     return (
@@ -181,6 +182,8 @@ function HomePage(props) {
         </div>
     );
 }
+
+// Drivers
 
 function Drivers(props) {
     const {activeDriverData} = props
@@ -220,13 +223,13 @@ function DriverCard(props) {
     );
 }
 
+// Constructors
+
 function Constructors(props){
     const {constructorData} = props
-    // same as saying const constructordata = props.constructordata
     const constructorCards = [];
 
     for (const constructor of Object.values(constructorData)) {
-        console.log(constructor)
       const constructorCard = (
         <ConstructorCard
           key={constructor.constructor_api_ref}
@@ -281,10 +284,43 @@ function ConstructorDetails(props) {
     );
 }
 
-function RecentNews(props) {
+// Recent News
+
+function RecentNews(props){
+    const {recentNewsData} = props
+    const newsCards = [];
+    let count = 0
+
+    for (const article of Object.values(recentNewsData)) {
+        const newsCard = (
+            <NewsCard
+            key={`article${count}`}
+            description = {article.description}
+            title = {article.title}
+            url = {article.url}
+            url_to_image = {article.url_to_image}
+            />
+        );
+        count++
+        console.log(count)
+        newsCards.push(newsCard);
+    }
     return (
         <div>
-            <p>Recent News</p>
+            {newsCards}
         </div>
+        
+    );
+}
+
+function NewsCard(props) {
+    const { description, title, url, url_to_image} = props;
+    return (
+        <div>
+            <img src = {url_to_image}/>
+            <a href={url} target="_blank">{title}</a>
+            <h1>{description}</h1>
+        </div>
+
     );
 }
