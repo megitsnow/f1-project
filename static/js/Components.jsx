@@ -254,7 +254,6 @@ function ConstructorCard(props) {
     return (
         <div>
             <ReactRouterDOM.Link to={`/constructors/${id}`}><img src = {img}/></ReactRouterDOM.Link>
-            <h2>{name}</h2>
         </div>
 
     );
@@ -263,11 +262,9 @@ function ConstructorCard(props) {
 function ConstructorDetails(props) {
     const params = ReactRouterDOM.useParams()
     const [constructorInfo, setConstructorInfo] = React.useState({});
-    console.log(params)
+
     const constructorId = params.constructorId
-    console.log(constructorId)
-    const queryString = new URLSearchParams({ constructorId: {constructorId} }).toString();
-    const url = `/constructors/?${queryString}`;
+    const url = `/constructors/${constructorId}`;
 
     React.useEffect(() => {
         fetch(url)
@@ -276,11 +273,34 @@ function ConstructorDetails(props) {
             setConstructorInfo(constructorData);
             });
         }, []);
+        
+        const individualConstructorCard = (
+            <IndividualConstructorCard
+            img = {constructorInfo.img}
+            name = {constructorInfo.name}
+            nationality = {constructorInfo.nationality}
+            wiki_url = {constructorInfo.wiki_url}
+            />
+        );
+
 
     return (
         <div>
-            <h1>Constructor Details</h1>
+            <img src = {constructorInfo.img}/>
+            {individualConstructorCard}
         </div>
+    );
+}
+
+function IndividualConstructorCard(props) {
+    const { img, name, nationality, wiki_url} = props;
+    return (
+        <div>
+            <h3>{name}</h3>
+            <h2>Nationality - {nationality}</h2>
+            <a href={wiki_url} target="_blank">History of {name}</a>
+        </div>
+
     );
 }
 
@@ -302,7 +322,6 @@ function RecentNews(props){
             />
         );
         count++
-        console.log(count)
         newsCards.push(newsCard);
     }
     return (

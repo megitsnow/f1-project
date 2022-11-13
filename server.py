@@ -36,7 +36,7 @@ def handle_signup():
         db.session.add(user)
         db.session.commit()
     else:
-        flash("Does not match")
+        return {'Status': 400, "Message": "Passwords do not match"}
 
     return jsonify(user.to_dict())
 
@@ -75,7 +75,7 @@ def constructor_logos():
 @app.route("/constructors/<constructor_id>")
 def constructor_indiv_info(constructor_id):
     """Get individual constructor information"""
-    constructor_id = request.args.get("constructorId")
+    print("*************************")
     print(constructor_id)
     constructor = crud.get_constructor_by_id(constructor_id)
     return jsonify(constructor.to_dict())  

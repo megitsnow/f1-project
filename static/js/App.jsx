@@ -29,8 +29,6 @@ function App () {
             });
         }, []);
 
-    console.log("LINE 32 - News", recentNewsData)
-
 
     return (
     <div>
