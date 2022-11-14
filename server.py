@@ -19,6 +19,8 @@ def login():
     return render_template('index.html')
 
 # Sign Up Routes
+## Need to update this so that it looks up more than just the passwords matching
+## Need to have it check if the user already exixts, if it is a valid email etc
 
 @app.route("/api/sign-up", methods=["POST"])
 def handle_signup():
@@ -40,21 +42,16 @@ def handle_signup():
 
     return jsonify(user.to_dict())
 
-# Log-In Routes
+# Log-In Routes 
 
 @app.route("/api/log-in", methods=["POST"])
 def handle_login():
-    """Create a new user."""
+    """Sign in a user and add to the session if already a user"""
 
     email = request.json.get("email")
     password = request.json.get("password")
-    print("************************")
-    print(email)
-    print(password)
     
     user = crud.get_user_by_email(email)
-    print("*******************************")
-    print(user)
 
     if not user or user.password != password:
         print("The email or password you entered was incorrect.")
@@ -80,7 +77,7 @@ def constructor_indiv_info(constructor_id):
     constructor = crud.get_constructor_by_id(constructor_id)
     return jsonify(constructor.to_dict())  
 
-# Driver routes
+# Driver routes. To include route for each individual driver like we have for the constructors
 
 @app.route("/api/active_drivers")
 def active_driver_data():
@@ -93,7 +90,7 @@ def active_driver_data():
 @app.route("/api/recent-news")
 def get_recent_articles():
     """Get recent articles"""
-    url =f'https://newsapi.org/v2/everything?q=F1 Racing&from=2022-10-30&sortBy=popularity&apiKey={API_KEY}'
+    url =f'https://newsapi.org/v2/everything?q=F1 Racing&from=2022-11-12&sortBy=popularity&apiKey={API_KEY}'
 
     response = requests.get(url)
     data = response.json()

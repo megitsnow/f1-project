@@ -1,10 +1,12 @@
-"""Models for movie ratings app."""
+"""Models for a F1 App"""
 
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from json import JSONEncoder
 
 db = SQLAlchemy()
+
+## Adding along tables and eventually relationships as I build additional functionality 
 
 class User(db.Model):
     """A user."""
@@ -28,7 +30,7 @@ class User(db.Model):
         return f"<User user_id={self.user_id} email={self.email}>"
 
 class Driver(db.Model):
-    """Information on Drivers"""
+    """Information on individual drivers"""
 
     __tablename__ = "drivers"
 
@@ -89,7 +91,7 @@ class Race(db.Model):
         return f"<Race race_id={self.race_id} name={self.name}>"
 
 class Constructor(db.Model):
-    """Information on Drivers"""
+    """Information for individual constructors"""
 
     __tablename__ = "constructors"
 

@@ -1,4 +1,9 @@
 
+// Things to work on: Are there ways to re-use some of this code?
+// For example, some of functions are very similar like the ones for the 
+// login and sign up forms. Additionally, I need to look at the naming and make 
+// sure that everything is intuitive 
+
 // Sign Up Form
 
 function SignUpForm(props) {
@@ -187,7 +192,6 @@ function HomePage(props) {
 
 function Drivers(props) {
     const {activeDriverData} = props
-    // same as saying const constructordata = props.constructordata
     const activeDriverCards = [];
 
     for (const driver of Object.values(activeDriverData)) {
@@ -318,7 +322,7 @@ function RecentNews(props){
             description = {article.description}
             title = {article.title}
             url = {article.url}
-            url_to_image = {article.url_to_image}
+            url_to_image = {article.url_to_img}
             />
         );
         count++

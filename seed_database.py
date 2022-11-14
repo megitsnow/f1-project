@@ -10,6 +10,7 @@ import crud
 import model
 import server
 from parsed_data import driver_data, races, constructor_data
+from model import Constructor, Driver
 
 
 os.system("dropdb f1")
@@ -18,7 +19,7 @@ os.system("createdb f1")
 model.connect_to_db(server.app)
 model.db.create_all()
 
-# Create 10 users; each user will make 10 ratings
+# Create 10 users
 for n in range(10):
     fname = f'user{n}'
     lname = 'test'
@@ -84,6 +85,8 @@ for i in races.keys():
 model.db.session.add_all(races_in_db)
 model.db.session.commit()
 
+# Seed constructors to the db
+
 constructor_in_db = []
 
 for i in constructor_data.keys():
@@ -99,4 +102,185 @@ for i in constructor_data.keys():
 
 model.db.session.add_all(constructor_in_db)
 model.db.session.commit()
+
+# Update photos for active drivers to F1 Website photo & set as active
+## To Update to to include lists and one function to loop over Drivers and one function to loop 
+## over constructors. Use the below to also confirm that I was grabbing the correct ID as a lot of 
+## drivers have the same last name 
+
+verstappen = Driver.query.filter_by(driver_id = "830").first()
+verstappen.img_url = '/static/imgs/drivers/Verstappen.jpeg'
+verstappen.active = True
+model.db.session.add(verstappen)
+model.db.session.commit()
+
+perez = Driver.query.filter_by(driver_id = "815").first()
+perez.img_url = '/static/imgs/drivers/Perez.jpeg'
+perez.active = True
+model.db.session.add(perez)
+model.db.session.commit()
+
+russell = Driver.query.filter_by(driver_id = "847").first()
+russell.img_url = '/static/imgs/drivers/Russel.jpeg'
+russell.active = True
+model.db.session.add(russell)
+model.db.session.commit()
+
+
+hamilton = Driver.query.filter_by(driver_id = "1").first()
+hamilton.img_url = '/static/imgs/drivers/Hamilton.jpeg'
+hamilton.active = True
+model.db.session.add(hamilton)
+model.db.session.commit()
+
+sainz = Driver.query.filter_by(driver_id = "832").first()
+sainz.img_url = '/static/imgs/drivers/Sainz.jpeg'
+sainz.active = True
+model.db.session.add(sainz)
+model.db.session.commit()
+
+ocon = Driver.query.filter_by(driver_id = "839").first()
+ocon.img_url = '/static/imgs/drivers/Ocon.jpeg'
+ocon.active = True
+model.db.session.add(ocon)
+model.db.session.commit()
+
+alonso = Driver.query.filter_by(driver_id = "4").first()
+alonso.img_url = '/static/imgs/drivers/Alonso.jpeg'
+alonso.active = True
+model.db.session.add(alonso)
+model.db.session.commit()
+
+bottas = Driver.query.filter_by(driver_id = "822").first()
+bottas.img_url = '/static/imgs/drivers/Bottas.jpeg'
+bottas.active = True
+model.db.session.add(bottas)
+model.db.session.commit()
+
+vettel = Driver.query.filter_by(driver_id = "20").first()
+vettel.img_url = '/static/imgs/drivers/Vettel.jpeg'
+vettel.active = True
+model.db.session.add(vettel)
+model.db.session.commit()
+
+ricciardo = Driver.query.filter_by(driver_id = "817").first()
+ricciardo.img_url = '/static/imgs/drivers/Ricardo.jpeg'
+ricciardo.active = True
+model.db.session.add(ricciardo)
+model.db.session.commit()
+
+magnussen = Driver.query.filter_by(driver_id = "825").first()
+magnussen.img_url = '/static/imgs/drivers/Magnessun.jpeg'
+magnussen.active = True
+model.db.session.add(magnussen)
+model.db.session.commit()
+
+leclerc = Driver.query.filter_by(driver_id = "844").first()
+leclerc.img_url = '/static/imgs/drivers/Leclerc.jpeg'
+leclerc.active = True
+model.db.session.add(leclerc)
+model.db.session.commit()
+
+gasly = Driver.query.filter_by(driver_id = "842").first()
+gasly.img_url = '/static/imgs/drivers/Gasly.jpeg'
+gasly.active = True
+model.db.session.add(gasly)
+model.db.session.commit()
+
+stroll = Driver.query.filter_by(driver_id = "840").first()
+stroll.img_url = '/static/imgs/drivers/Stroll.jpeg'
+stroll.active = True
+model.db.session.add(stroll)
+model.db.session.commit()
+
+schumacher = Driver.query.filter_by(driver_id = "854").first()
+schumacher.img_url = '/static/imgs/drivers/Schumaker.jpeg'
+schumacher.active = True
+model.db.session.add(schumacher)
+model.db.session.commit()
+
+tsunoda = Driver.query.filter_by(driver_id = "852").first()
+tsunoda.img_url = '/static/imgs/drivers/Tsuonada.jpeg'
+tsunoda.active = True
+model.db.session.add(tsunoda)
+model.db.session.commit()
+
+zhou = Driver.query.filter_by(driver_id = "855").first()
+zhou.img_url = '/static/imgs/drivers/Guanyu.jpeg'
+zhou.active = True
+model.db.session.add(zhou)
+model.db.session.commit()
+
+albon = Driver.query.filter_by(driver_id = "848").first()
+albon.img_url = '/static/imgs/drivers/Albon.jpeg'
+albon.active = True
+model.db.session.add(albon)
+model.db.session.commit()
+
+latifi = Driver.query.filter_by(driver_id = "849").first()
+latifi.img_url = '/static/imgs/drivers/Latifi.jpeg'
+latifi.active = True
+model.db.session.add(latifi)
+model.db.session.commit()
+
+
+
+
+
+
+
+
+
+
+#Update the photos for the constructors that are active 
+haas = Constructor.query.filter_by(constructor_id = "210").first()
+haas.img = '/static/imgs/Haas_F1_Team_logo.png'
+model.db.session.add(haas)
+model.db.session.commit()
+
+ferrari = Constructor.query.filter_by(constructor_id = "6").first()
+ferrari.img = '/static/imgs/Scuderia_Ferrari_Logo.svg'
+model.db.session.add(ferrari)
+model.db.session.commit()
+
+aston_martin = Constructor.query.filter_by(constructor_id = "117").first()
+aston_martin.img = '/static/imgs/Aston_Martin_Aramco_Cognizant_F1_Team.jpg'
+model.db.session.add(aston_martin)
+model.db.session.commit()
+
+alpine = Constructor.query.filter_by(constructor_id = "214").first()
+alpine.img = '/static/imgs/Alpine_F1_Team_Logo.svg'
+model.db.session.add(alpine)
+model.db.session.commit()
+
+alpha_tauri = Constructor.query.filter_by(constructor_id = "213").first()
+alpha_tauri.img = '/static/imgs/Scuderia_Alpha-Tauri.svg'
+model.db.session.add(alpha_tauri)
+model.db.session.commit()
+
+red_bull = Constructor.query.filter_by(constructor_id = "9").first()
+red_bull.img = '/static/imgs/RedBull.svg'
+model.db.session.add(red_bull)
+model.db.session.commit()
+
+williams = Constructor.query.filter_by(constructor_id = "3").first()
+williams.img = '/static/imgs/Williams_Racing_2020_logo.png'
+model.db.session.add(williams)
+model.db.session.commit()
+
+mclaren = Constructor.query.filter_by(constructor_id = "1").first()
+mclaren.img = '/static/imgs/McLaren_Racing_logo.svg'
+model.db.session.add(mclaren)
+model.db.session.commit()
+
+alfa_romeo = Constructor.query.filter_by(constructor_id = "51").first()
+alfa_romeo.img = '/static/imgs/Alfa_Romeo_F1_Team_ORLEN_logo.svg'
+model.db.session.add(alfa_romeo)
+model.db.session.commit()
+
+mercedes = Constructor.query.filter_by(constructor_id = "131").first()
+mercedes.img = '/static/imgs/Mercedes-Benz_in_Formula_One_logo.svg'
+model.db.session.add(mercedes)
+model.db.session.commit()
+
 
