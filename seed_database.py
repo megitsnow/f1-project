@@ -9,7 +9,7 @@ import sys
 import crud
 import model
 import server
-from parsed_data import driver_data, races, constructor_data
+from parsed_data import driver_data, races, constructor_data, results, sprint_results, status
 from model import Constructor, Driver
 
 
@@ -59,7 +59,8 @@ model.db.session.commit()
 races_in_db = []
 
 for i in races.keys():
-    year, round, circuit_id, name, date, time, url , fp1_date, fp1_time, fp2_date, fp2_time, fp3_date, fp3_time, quali_date, quali_time, sprint_date, sprint_time = (
+    race_id, year, round, circuit_id, name, date, time, url , fp1_date, fp1_time, fp2_date, fp2_time, fp3_date, fp3_time, quali_date, quali_time, sprint_date, sprint_time = (
+        i,
         races[i]["year"],
         races[i]["round"],
         races[i]["circuit_id"],
@@ -79,7 +80,7 @@ for i in races.keys():
         races[i]["sprint_time"]
     )
 
-    db_race = crud.create_race(year, round, circuit_id, name, date, time, url , fp1_date, fp1_time, fp2_date, fp2_time, fp3_date, fp3_time, quali_date, quali_time, sprint_date, sprint_time)
+    db_race = crud.create_race(race_id, year, round, circuit_id, name, date, time, url , fp1_date, fp1_time, fp2_date, fp2_time, fp3_date, fp3_time, quali_date, quali_time, sprint_date, sprint_time)
     races_in_db.append(db_race)
 
 model.db.session.add_all(races_in_db)
@@ -102,6 +103,86 @@ for i in constructor_data.keys():
 
 model.db.session.add_all(constructor_in_db)
 model.db.session.commit()
+
+
+# seed the results table
+
+result_in_db = []
+
+for i in results.keys():
+    result_id, race_id, driver_id, constructor_id ,number, grid, position, position_text, position_order, points, laps, time, milliseconds, fastest_lap, rank, fastest_lap_time, fastest_lap_speed, status_id = (
+        i,
+        results[i]["race_id"],
+        results[i]["driver_id"],
+        results[i]["constructor_id"],
+        results[i]["number"],
+        results[i]["grid"],
+        results[i]["position"],
+        results[i]["position_text"],
+        results[i]["position_order"],
+        results[i]["points"],
+        results[i]["laps"],
+        results[i]["time"],
+        results[i]["milliseconds"],
+        results[i]["fastest_lap"],
+        results[i]["rank"],
+        results[i]["fastest_lap_time"],
+        results[i]["fastest_lap_speed"],
+        results[i]["status_id"],
+    )
+
+    db_result = crud.create_result(result_id, race_id, driver_id, constructor_id ,number, grid, position, position_text, position_order, points, laps, time, milliseconds, fastest_lap, rank, fastest_lap_time, fastest_lap_speed, status_id)
+    result_in_db.append(db_result)
+
+model.db.session.add_all(result_in_db)
+model.db.session.commit()
+
+# seed the results table
+
+sprint_result_in_db = []
+
+for i in sprint_results.keys():
+    result_id, race_id, driver_id, constructor_id ,number, grid, position, position_text, position_order, points, laps, time, milliseconds, fastest_lap, fastest_lap_time, status_id = (
+        i,
+        sprint_results[i]["race_id"],
+        sprint_results[i]["driver_id"],
+        sprint_results[i]["constructor_id"],
+        sprint_results[i]["number"],
+        sprint_results[i]["grid"],
+        sprint_results[i]["position"],
+        sprint_results[i]["position_text"],
+        sprint_results[i]["position_order"],
+        sprint_results[i]["points"],
+        sprint_results[i]["laps"],
+        sprint_results[i]["time"],
+        sprint_results[i]["milliseconds"],
+        sprint_results[i]["fastest_lap"],
+        sprint_results[i]["fastest_lap_time"],
+        sprint_results[i]["status_id"],
+    )
+
+    db_sprint_result = crud.create_sprint_result(result_id, race_id, driver_id, constructor_id ,number, grid, position, position_text, position_order, points, laps, time, milliseconds, fastest_lap, fastest_lap_time, status_id)
+    sprint_result_in_db.append(db_sprint_result)
+
+model.db.session.add_all(sprint_result_in_db)
+model.db.session.commit()
+
+# seed statuses in DB
+
+# status_in_db = []
+
+# for key,value in status.items():
+#     status_id, status = (
+#         key,
+#         value['status']
+#     )
+    
+#     db_status = crud.create_status(status_id, status)
+#     status_in_db.append(db_status)
+
+# model.db.session.add_all(status_in_db)
+# model.db.session.commit()
+
 
 # Update photos for active drivers to F1 Website photo & set as active
 ## To Update to to include lists and one function to loop over Drivers and one function to loop 

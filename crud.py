@@ -1,6 +1,6 @@
 """CRUD operations."""
 
-from model import db, User, Driver, Race, Constructor, connect_to_db
+from model import db, User, Driver, Race, Constructor, Result, SprintResult, connect_to_db
 
 def create_user(fname, lname, email, password):
     """Create and return a new user."""
@@ -32,10 +32,11 @@ def create_driver(driver_id, driver_api_ref, number, code, forename, surname, do
 
     return driver
 
-def create_race(year, round, circuit_id, name, date, time, url , fp1_date, fp1_time, fp2_date, fp2_time, fp3_date, fp3_time, quali_date, quali_time, sprint_date, sprint_time):
+def create_race(race_id, year, round, circuit_id, name, date, time, url , fp1_date, fp1_time, fp2_date, fp2_time, fp3_date, fp3_time, quali_date, quali_time, sprint_date, sprint_time):
     """Create and return a new driver."""
 
     race = Race(
+        race_id = race_id,
         year=year,
         round=round,
         circuit_id=circuit_id,
@@ -69,6 +70,66 @@ def create_constructor(constructor_id, constructor_api_ref, name, nationality, u
     )
 
     return constructor
+
+def create_result(result_id, race_id, driver_id, constructor_id ,number, grid, position, position_text, position_order, points, laps, time, milliseconds, fastest_lap, rank, fastest_lap_time, fastest_lap_speed, status_id):
+    """Create and return a new result"""
+
+    result = Result(
+        result_id = result_id,
+        race_id = race_id,
+        driver_id = driver_id,
+        constructor_id= constructor_id,
+        number = number,
+        grid=grid,
+        position=position,
+        position_text = position_text,
+        position_order = position_order,
+        points = points,
+        laps = laps,
+        time = time,
+        milliseconds = milliseconds,
+        fastest_lap = fastest_lap,
+        rank = rank,
+        fastest_lap_time = fastest_lap_time,
+        fastest_lap_speed = fastest_lap_speed,
+        status_id = status_id
+    )
+
+    return result
+
+def create_sprint_result(result_id,race_id,driver_id,constructor_id,number,grid,position,position_text,position_order,points,laps,time,milliseconds,fastest_lap,fastest_lap_time,status_id):
+    """Create and return a new sprint result"""
+
+    result = SprintResult(
+        result_id = result_id,
+        race_id = race_id,
+        driver_id = driver_id,
+        constructor_id= constructor_id,
+        number = number,
+        grid=grid,
+        position=position,
+        position_text = position_text,
+        position_order = position_order,
+        points = points,
+        laps = laps,
+        time = time,
+        milliseconds = milliseconds,
+        fastest_lap = fastest_lap,
+        fastest_lap_time = fastest_lap_time,
+        status_id = status_id
+    )
+
+    return result
+
+# def create_status(status_id, status):
+#     """Create and return a status"""
+
+#     status = Status(
+#         status_id = status_id,
+#         status= status
+#     )
+
+#     return status
 
 def get_constructor_by_id(id):
     """Return a user by email."""
