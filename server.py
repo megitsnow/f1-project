@@ -1,7 +1,7 @@
 """Server for F-1 app."""
 
 from flask import Flask, render_template, request, flash, session, redirect, jsonify
-from model import connect_to_db, db, Constructor, Driver
+from model import connect_to_db, db, Constructor, Driver, Race, Result 
 import json
 import crud
 import os
@@ -78,6 +78,33 @@ def constructor_indiv_info(constructor_id):
     return jsonify(constructor.to_dict())  
 
 # Driver routes. To include route for each individual driver like we have for the constructors
+
+@app.route("/drivers/<driver_id>")
+def driver_indiv_info(driver_id):
+    """Get individual driver information"""
+    print("*************************")
+    print(driver_id)
+    driver_race_results = (
+    db.session.query(Driver.forename, Driver.surname, Driver.nationality, Race.name, Result.points, Result.position)
+    .join(Result, Result.race_id == Race.race_id)
+    .join(Driver, Driver.driver_id == Result.driver_id)
+    .filter(Driver.driver_id == 1).first()
+    )
+
+    list_results = list(driver_race_results)
+
+    results = {}
+
+    results['fname'] = list_results[0]
+    results['lname'] = list_results[1]
+    results['nationality'] = list_results[2]
+    results['race_name'] = list_results[3]
+    results['points'] = int(list_results[4])
+    results['position'] = list_results[5]
+    print("*********RESULTS")
+    print(results)
+
+    return jsonify(results)  
 
 @app.route("/api/active_drivers")
 def active_driver_data():

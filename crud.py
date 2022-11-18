@@ -52,8 +52,8 @@ def create_race(race_id, year, round, circuit_id, name, date, time, url , fp1_da
         fp3_time = fp3_time,
         quali_date = quali_date,
         quali_time = quali_time,
-        sprint_date = quali_date,
-        sprint_time = quali_time,
+        sprint_date = sprint_date,
+        sprint_time = sprint_time,
     )
 
     return race
@@ -121,20 +121,15 @@ def create_sprint_result(result_id,race_id,driver_id,constructor_id,number,grid,
 
     return result
 
-# def create_status(status_id, status):
-#     """Create and return a status"""
-
-#     status = Status(
-#         status_id = status_id,
-#         status= status
-#     )
-
-#     return status
-
 def get_constructor_by_id(id):
     """Return a user by email."""
 
     return Constructor.query.filter(Constructor.constructor_id == id).first()
+
+def get_driver_by_id(id):
+    """Return a user by email."""
+
+    return Driver.query.filter(Driver.driver_id == id).first()
 
 if __name__ == "__main__":
     from server import app

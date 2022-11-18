@@ -123,21 +123,6 @@ class Constructor(db.Model):
     def __repr__(self):
         return f"<Constructor constructor_id={self.constructor_id} name={self.name}>"
 
-# class Status(db.Model):
-#     """A storage space."""
-
-#     __tablename__ = "statuses"
-
-#     status_id = db.Column(db.String, primary_key=True, nullable = False)
-#     status = db.Column(db.String(255), nullable = False)
-
-#     results = db.relationship("Result", back_populates="status")
-#     sprint_results = db.relationship("SprintResult", back_populates="status")
-
-#     def __repr__(self):
-#         return f"<Status status_id={self.status_id} status={self.status}>"
-
-
 
 class Result(db.Model):
     """A melon."""
@@ -153,7 +138,7 @@ class Result(db.Model):
     position = db.Column(db.String, nullable = True)
     position_text = db.Column(db.String(255), nullable = False)
     position_order = db.Column(db.String, nullable = False )
-    points = db.Column(db.String, nullable = False)
+    points = db.Column(db.Numeric, nullable = False)
     laps = db.Column(db.String, nullable = False)
     time = db.Column(db.String(255), nullable = True)
     milliseconds = db.Column(db.String, nullable = True)
@@ -161,11 +146,10 @@ class Result(db.Model):
     rank = db.Column(db.String)
     fastest_lap_time = db.Column(db.String(255))
     fastest_lap_speed = db.Column(db.String(255))
-    status_id = db.Column(db.String, nullable = False)
+    status_id = db.Column(db.String)
 
     driver = db.relationship("Driver", back_populates="results")
     constructor = db.relationship("Constructor", back_populates="results")
-    # status = db.relationship("Status", back_populates="results")
     race = db.relationship("Race", back_populates="results")
 
     def __repr__(self):
@@ -196,7 +180,6 @@ class SprintResult(db.Model):
     race = db.relationship("Race", back_populates="sprint_results")
     driver = db.relationship("Driver", back_populates="sprint_results")
     constructor = db.relationship("Constructor", back_populates="sprint_results")
-    # status = db.relationship("Status", back_populates="sprint_results")
 
     def __repr__(self):
         return f"<SprintResult result_id={self.result_id} race_id={self.race_id}>"

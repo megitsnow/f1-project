@@ -51,6 +51,10 @@ function App () {
                 <Drivers activeDriverData = {activeDriverData}/>
             </ReactRouterDOM.Route >
 
+            <ReactRouterDOM.Route path="/drivers/:driverId">
+                <DriverDetails/>
+            </ReactRouterDOM.Route >
+
             <ReactRouterDOM.Route exact path="/constructors">
                 <Constructors constructorData = {constructorData}/>
             </ReactRouterDOM.Route >

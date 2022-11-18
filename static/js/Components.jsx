@@ -195,13 +195,13 @@ function Drivers(props) {
     const activeDriverCards = [];
 
     for (const driver of Object.values(activeDriverData)) {
-        console.log(driver)
       const driverCard = (
         <DriverCard
           key={driver.code}
           surname = {driver.surname}
           img = {driver.img_url}
           nationality = {driver.nationality}
+          id = {driver.driver_id}
         />
       );
   
@@ -216,16 +216,44 @@ function Drivers(props) {
 }
 
 function DriverCard(props) {
-    const { surname, img, nationality} = props;
+    const { surname, img, nationality, id} = props;
     return (
         <div>
-            <img src = {img}/>
+            <ReactRouterDOM.Link to={`/drivers/${id}`}><img src = {img}/></ReactRouterDOM.Link>
             <h2>{surname}</h2>
             <h1>{nationality}</h1>
         </div>
 
     );
 }
+
+function DriverDetails(props) {
+    const params = ReactRouterDOM.useParams()
+    const [driverInfo, setDriverInfo] = React.useState({});
+    const driverId = params.driverId
+
+    const url = `/drivers/${driverId}`;
+
+    React.useEffect(() => {
+    fetch(url)
+        .then((response) => response.json())
+        .then((driverData) => {
+        setDriverInfo(driverData);
+        });
+    }, []);
+
+    console.log(driverInfo)
+    console.log(driverInfo.fname)
+    console.log(driverInfo.lname)
+
+
+    return (
+        <div>
+            <div>Hello</div>
+        </div>
+    );
+}
+
 
 // Constructors
 

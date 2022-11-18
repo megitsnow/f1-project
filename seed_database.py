@@ -166,23 +166,15 @@ for i in sprint_results.keys():
 
 model.db.session.add_all(sprint_result_in_db)
 model.db.session.commit()
+# points = db.session.query(Result.points).join(Driver, Driver.driver_id == Result.driver_id).filter(Driver.driver_id == 1).all()
 
-# seed statuses in DB
 
-# status_in_db = []
-
-# for key,value in status.items():
-#     status_id, status = (
-#         key,
-#         value['status']
-#     )
-    
-#     db_status = crud.create_status(status_id, status)
-#     status_in_db.append(db_status)
-
-# model.db.session.add_all(status_in_db)
-# model.db.session.commit()
-
+# race_results = (
+#     db.session.query(Driver.forename, Driver.surname, Driver.nationality, Race.name, Result.points, Result.position)
+#     .join(Result, Result.race_id == Race.race_id)
+#     .join(Driver, Driver.driver_id == Result.driver_id)
+#     .filter(Driver.driver_id == 1).first()
+# )
 
 # Update photos for active drivers to F1 Website photo & set as active
 ## To Update to to include lists and one function to loop over Drivers and one function to loop 
