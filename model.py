@@ -26,8 +26,31 @@ class User(db.Model):
                 'email': self.email,
                 'password': self.password}
 
+    likes = db.relationship("Like", back_populates="user")
+
     def __repr__(self):
         return f"<User user_id={self.user_id} email={self.email}>"
+
+class Like(db.Model):
+    """Table storing all likes for individual users"""
+
+    __tablename__ = "likes"
+
+    like_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    driver_id = db.Column(db.Integer, db.ForeignKey("drivers.driver_id"))
+
+    def to_dict(self):
+        return {'like_id': self.like_id,
+                'user_id': self.user_id,
+                'driver_id': self.driver_id,
+                }
+
+    user = db.relationship("User", back_populates="likes")
+    driver = db.relationship("Driver", back_populates="likes")
+
+    def __repr__(self):
+        return f"<Like like_id={self.like_id} user_id={self.user_id}>"
 
 class Driver(db.Model):
     """Information on individual drivers"""
@@ -48,6 +71,7 @@ class Driver(db.Model):
 
     results = db.relationship("Result", back_populates="driver")
     sprint_results = db.relationship("SprintResult", back_populates="driver")
+    likes = db.relationship("Like", back_populates="driver")
 
     def to_dict(self):
         return {'driver_id': self.driver_id,
@@ -138,7 +162,7 @@ class Result(db.Model):
     position = db.Column(db.String, nullable = True)
     position_text = db.Column(db.String(255), nullable = False)
     position_order = db.Column(db.String, nullable = False )
-    points = db.Column(db.Numeric, nullable = False)
+    points = db.Column(db.String, nullable = False)
     laps = db.Column(db.String, nullable = False)
     time = db.Column(db.String(255), nullable = True)
     milliseconds = db.Column(db.String, nullable = True)

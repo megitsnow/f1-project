@@ -1,6 +1,6 @@
 """CRUD operations."""
 
-from model import db, User, Driver, Race, Constructor, Result, SprintResult, connect_to_db
+from model import db, User, Driver, Race, Constructor, Result, SprintResult, Like, connect_to_db
 
 def create_user(fname, lname, email, password):
     """Create and return a new user."""
@@ -8,6 +8,13 @@ def create_user(fname, lname, email, password):
     user = User(fname = fname,lname = lname, email=email, password=password)
 
     return user
+
+def create_like(user_id, driver_id):
+    """Create and return a new user."""
+
+    like = Like(user_id = user_id, driver_id = driver_id)
+
+    return like
 
 def get_user_by_email(email):
     """Return a user by email."""

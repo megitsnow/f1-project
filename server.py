@@ -31,12 +31,12 @@ def handle_signup():
     password = request.json.get("password")
     password_confirm = request.json.get("passwordConfirm")
 
-    if password == password_confirm:
+    if crud.get_user_by_email(email) is None and password == password_confirm:
+        print("user does not exist!!")
         user = crud.create_user(fname = fname, lname = lname, email = email, password = password)
-        print("******** SIGN UP")
-        print(user)
         db.session.add(user)
         db.session.commit()
+        session["user_email"] = user.email
     else:
         return {'Status': 400, "Message": "Passwords do not match"}
 
@@ -72,7 +72,6 @@ def constructor_logos():
 @app.route("/constructors/<constructor_id>")
 def constructor_indiv_info(constructor_id):
     """Get individual constructor information"""
-    print("*************************")
     print(constructor_id)
     constructor = crud.get_constructor_by_id(constructor_id)
     return jsonify(constructor.to_dict())  
@@ -82,29 +81,55 @@ def constructor_indiv_info(constructor_id):
 @app.route("/drivers/<driver_id>")
 def driver_indiv_info(driver_id):
     """Get individual driver information"""
-    print("*************************")
     print(driver_id)
-    driver_race_results = (
-    db.session.query(Driver.forename, Driver.surname, Driver.nationality, Race.name, Result.points, Result.position)
+    race_results = (
+    db.session.query(Race.race_id, Driver.forename, Driver.surname, Driver.nationality, Race.name, Result.points, Result.position, Driver.img_url)
     .join(Result, Result.race_id == Race.race_id)
     .join(Driver, Driver.driver_id == Result.driver_id)
-    .filter(Driver.driver_id == 1).first()
+    .filter(Driver.driver_id == driver_id).all()
     )
 
-    list_results = list(driver_race_results)
+    driver_race_results = {}
 
-    results = {}
+    for i, value in enumerate(race_results):
+        list_items = list(value)
+        for i, item in enumerate(list_items):
+            race = {}
+            race_id = str(list_items[0])
+            if i == 0: 
+                driver_race_results[race_id] = {}
+            elif i == 1:
+                driver_race_results[race_id]['fname'] = item
+            elif i == 2:
+                driver_race_results[race_id]['lname'] = item
+            elif i == 3:
+                driver_race_results[race_id]['nationality'] = item
+            elif i == 4:
+                driver_race_results[race_id]['race_name'] = item
+            elif i == 5:
+                driver_race_results[race_id]['points'] = item
+            elif i == 6:
+                driver_race_results[race_id]['position'] = item
+            elif i == 7:
+                driver_race_results[race_id]['img_url'] = item
 
-    results['fname'] = list_results[0]
-    results['lname'] = list_results[1]
-    results['nationality'] = list_results[2]
-    results['race_name'] = list_results[3]
-    results['points'] = int(list_results[4])
-    results['position'] = list_results[5]
-    print("*********RESULTS")
-    print(results)
+    return jsonify(driver_race_results)  
 
-    return jsonify(results)  
+@app.route("/api/driver-like", methods=["POST"])
+def create_user_like():
+    """Sign in a user and add to the session if already a user"""
+
+    driver_id = request.json.get("driverId")
+    logged_in_email = session.get("user_email")
+    print(f"LINE 128 {driver_id}")
+    print(logged_in_email)
+
+    user = crud.get_user_by_email(logged_in_email)
+    like = crud.create_like(user.user_id, driver_id)
+    db.session.add(like)
+    db.session.commit()
+
+    return jsonify(like.to_dict())
 
 @app.route("/api/active_drivers")
 def active_driver_data():

@@ -164,16 +164,16 @@ for i in sprint_results.keys():
     db_sprint_result = crud.create_sprint_result(result_id, race_id, driver_id, constructor_id ,number, grid, position, position_text, position_order, points, laps, time, milliseconds, fastest_lap, fastest_lap_time, status_id)
     sprint_result_in_db.append(db_sprint_result)
 
-model.db.session.add_all(sprint_result_in_db)
-model.db.session.commit()
+# model.db.session.add_all(sprint_result_in_db)
+# model.db.session.commit()
 # points = db.session.query(Result.points).join(Driver, Driver.driver_id == Result.driver_id).filter(Driver.driver_id == 1).all()
 
 
 # race_results = (
-#     db.session.query(Driver.forename, Driver.surname, Driver.nationality, Race.name, Result.points, Result.position)
+#     db.session.query(Race.race_id, Driver.forename, Driver.surname, Driver.nationality, Race.name, Result.points, Result.position)
 #     .join(Result, Result.race_id == Race.race_id)
 #     .join(Driver, Driver.driver_id == Result.driver_id)
-#     .filter(Driver.driver_id == 1).first()
+#     .filter(Driver.driver_id == 1).all()
 # )
 
 # Update photos for active drivers to F1 Website photo & set as active

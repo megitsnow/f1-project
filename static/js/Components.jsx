@@ -95,7 +95,6 @@ function LogIn(props) {
     })
 
     const handleChange = (event) => {
-        console.log("Line 93 Log in", logInData)
         const {name, value} = event.target
         setLogInData(prevLogInData => ({
             ...prevLogInData,
@@ -168,7 +167,10 @@ return (
             to="/recent-news">
             <h3>Recent News</h3>
         </ReactRouterDOM.NavLink>
-
+        <ReactRouterDOM.NavLink
+            to="/user-profile">
+            <h3>User Profile</h3>
+        </ReactRouterDOM.NavLink>
         <ReactRouterDOM.NavLink
             to="/log-in">
             <h3>Log In</h3>
@@ -184,6 +186,14 @@ function HomePage(props) {
     return (
         <div>
             <p>Homepage</p>
+        </div>
+    );
+}
+
+function UserProfile(props) {
+    return (
+        <div>
+            <p>User Profile</p>
         </div>
     );
 }
@@ -217,11 +227,32 @@ function Drivers(props) {
 
 function DriverCard(props) {
     const { surname, img, nationality, id} = props;
+
+   const driverInformation= {}
+   driverInformation['driverId'] = id
+
+
+    function addToLikes() {
+        alert("clicked!")
+        fetch('/api/driver-like', {
+            method: 'POST',
+            body: JSON.stringify(driverInformation),
+            headers: {
+            'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+            alert(responseJson.status);
+            });
+    }
+
     return (
         <div>
             <ReactRouterDOM.Link to={`/drivers/${id}`}><img src = {img}/></ReactRouterDOM.Link>
             <h2>{surname}</h2>
             <h1>{nationality}</h1>
+            <img src = '/static/imgs/drivers/hearticon.jpeg' onClick = {addToLikes}></img>
         </div>
 
     );
@@ -231,6 +262,7 @@ function DriverDetails(props) {
     const params = ReactRouterDOM.useParams()
     const [driverInfo, setDriverInfo] = React.useState({});
     const driverId = params.driverId
+    let count = 0
 
     const url = `/drivers/${driverId}`;
 
@@ -242,17 +274,48 @@ function DriverDetails(props) {
         });
     }, []);
 
-    console.log(driverInfo)
-    console.log(driverInfo.fname)
-    console.log(driverInfo.lname)
+    const resultsDriverCards = []
+
+    for (const driver of Object.values(driverInfo)) {
+        const resultCard = (
+          <DriverResultCard
+            key={`${driver.race_name}${driver.fname}${count}`}
+            points = {driver.points}
+            position = {driver.position}
+            race_name = {driver.race_name}
+          />
+        );
+        count++
+        resultsDriverCards.push(resultCard);
+      }
 
 
     return (
         <div>
-            <div>Hello</div>
+            <table>
+            <tr>
+                <th>Race Name</th>
+                <th>Points</th>
+                <th>Position</th>
+            </tr>
+            {resultsDriverCards}
+            </table>
         </div>
-    );
-}
+        );
+    }
+
+    function DriverResultCard(props) {
+        const { points, position, race_name} = props;
+        return (
+            <tr>
+                <td>{race_name}</td>
+                <td>{position}</td>
+                <td>{points}</td>
+            </tr>
+    
+        );
+    }
+
 
 
 // Constructors

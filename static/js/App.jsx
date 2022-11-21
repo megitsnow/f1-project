@@ -47,6 +47,10 @@ function App () {
                 <HomePage/>
             </ReactRouterDOM.Route>
 
+            <ReactRouterDOM.Route exact path="/user-profile">
+                <UserProfile/>
+            </ReactRouterDOM.Route>
+
             <ReactRouterDOM.Route exact path="/drivers">
                 <Drivers activeDriverData = {activeDriverData}/>
             </ReactRouterDOM.Route >
