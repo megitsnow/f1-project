@@ -193,7 +193,7 @@ function HomePage(props) {
 function UserProfile(props) {
     return (
         <div>
-            <p>User Profile</p>
+            < UserLikes/>
         </div>
     );
 }
@@ -293,28 +293,92 @@ function DriverDetails(props) {
     return (
         <div>
             <table>
-            <tr>
-                <th>Race Name</th>
-                <th>Points</th>
-                <th>Position</th>
-            </tr>
+            <thead>
+                <tr>
+                    <th>Race Name</th>
+                    <th>Points</th>
+                    <th>Position</th>
+                </tr>
+            </thead>
             {resultsDriverCards}
             </table>
         </div>
         );
     }
 
-    function DriverResultCard(props) {
-        const { points, position, race_name} = props;
-        return (
+function DriverResultCard(props) {
+    const { points, position, race_name} = props;
+    return (
+        <tbody>
             <tr>
                 <td>{race_name}</td>
                 <td>{position}</td>
                 <td>{points}</td>
             </tr>
-    
-        );
+        </tbody>
+
+    );
+}
+
+function UserLikes(props){
+    const [likes, setLikes] = React.useState({});
+    const [isShown, setIsShown] = React.useState(false)
+  
+    function toggleShown(){
+        setIsShown(prevShown => !prevShown)
+        console.log("clicked")
     }
+
+    React.useEffect(() => {
+    fetch('/api/user-like')
+        .then((response) => response.json())
+        .then((likeData) => {
+        setLikes(likeData);
+        });
+    }, []);
+
+    let count = 150
+
+    const likesDriverCards = []
+
+    for (const item of Object.values(likes)) {
+        const likeCard = (
+            <LikeDriverCard 
+            key={`${item.id}${count}`}
+            surname={item.lname}
+            img={item.img}
+            nationality={item.nationality}
+            id={item.id}
+        />
+        );
+        count++
+        likesDriverCards.push(likeCard);
+      }
+
+      console.log(likesDriverCards)
+
+    return(
+        <div>
+            <h3 onClick={toggleShown}>{isShown ? "Hide" : "View"} Your Liked Drivers</h3>
+            {isShown && <div>{likesDriverCards}</div>}
+        </div>
+    
+    );
+
+}
+
+function LikeDriverCard(props) {
+    const { surname, img, nationality, id} = props;
+
+    return (
+        <div>
+            <ReactRouterDOM.Link to={`/drivers/${id}`}><img src = {img}/></ReactRouterDOM.Link>
+            <h2>{surname}</h2>
+            <h1>{nationality}</h1>
+        </div>
+
+    );
+}
 
 
 
@@ -438,3 +502,57 @@ function NewsCard(props) {
 
     );
 }
+
+function UserInformation(props){
+    const [userInformation, setUserInformation] = React.useState({});
+
+    React.useEffect(() => {
+    fetch('/api/user-information')
+        .then((response) => response.json())
+        .then((userData) => {
+        setUserInformation(userData);
+        });
+    }, []);
+
+    console.log(userInformation)
+
+    const individualInformation= (
+        <IndividualUserInformation
+        key = {`${userInformation.fname}${userInformation.user_id}`}
+        fname = {userInformation.fname}
+        lname = {userInformation.lname}
+        email = {userInformation.email}
+        password = {userInformation.password}
+        />
+    )
+
+
+    return(
+        <div>
+            {individualInformation}
+        </div>
+    
+    );
+
+}
+
+function IndividualUserInformation(props) {
+    const { fname, lname, email, password} = props;
+    const [isShown, setIsShown] = React.useState(false)
+  
+    function toggleShown(){
+        setIsShown(prevShown => !prevShown)
+        console.log("clicked")
+    }
+
+    return (
+        <div>
+            <h3>{`Welcome Back, ${fname} ${lname}`}</h3>
+            <p>{`Email: ${email}`}</p>
+            <p>Password: {isShown && <span>{password}</span>}</p>
+            <button onClick={toggleShown}>{isShown ? "Hide" : "Show"} Password</button>
+        </div>
+
+    );
+}
+

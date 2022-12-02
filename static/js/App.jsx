@@ -48,6 +48,7 @@ function App () {
             </ReactRouterDOM.Route>
 
             <ReactRouterDOM.Route exact path="/user-profile">
+                <UserInformation/>
                 <UserProfile/>
             </ReactRouterDOM.Route>
 

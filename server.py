@@ -1,7 +1,7 @@
 """Server for F-1 app."""
 
 from flask import Flask, render_template, request, flash, session, redirect, jsonify
-from model import connect_to_db, db, Constructor, Driver, Race, Result 
+from model import connect_to_db, db, Constructor, Driver, Race, Result, Like, User
 import json
 import crud
 import os
@@ -57,11 +57,20 @@ def handle_login():
         print("The email or password you entered was incorrect.")
     else:
         session["user_email"] = user.email
+        print("****************************** LOG IN")
+        print(session["user_email"])
         print(f"Welcome back, {user.email}!")
 
     return jsonify(user.to_dict())
 
 # Constructor routes
+
+@app.route("/api/user-information")
+def user_information():
+    """Get user information"""
+    user_email = session["user_email"]
+    user = User.query.filter_by(email = user_email).first()
+    return jsonify(user.to_dict())
 
 @app.route("/api/constructors")
 def constructor_logos():
@@ -130,6 +139,43 @@ def create_user_like():
     db.session.commit()
 
     return jsonify(like.to_dict())
+
+@app.route("/api/user-like")
+def render_user_likes():
+    """Sign in a user and add to the session if already a user"""
+
+    logged_in_email = session.get("user_email")
+
+    user = crud.get_user_by_email(logged_in_email)
+    likes_by_user = Like.query.filter_by(user_id = user.user_id).all()
+    
+    driver_info_per_like = (
+    db.session.query(Like.like_id, Driver.forename, Driver.surname, Driver.img_url, Driver.nationality, Driver.driver_id)
+    .join(Like, Like.driver_id == Driver.driver_id)
+    .filter(Like.user_id == '1').all()
+    )
+    
+    user_likes = {}
+
+    for i, value in enumerate(driver_info_per_like):
+        list_items = list(value)
+        for i, item in enumerate(list_items):
+            like = {}
+            like_id = str(list_items[0])
+            if i == 0: 
+                user_likes[like_id] = {}
+            elif i == 1:
+                user_likes[like_id]['fname'] = item
+            elif i == 2:
+                user_likes[like_id]['lname'] = item
+            elif i == 3:
+                user_likes[like_id]['img'] = item
+            elif i == 4:
+                user_likes[like_id]['nationality'] = item
+            elif i == 5:
+                user_likes[like_id]['id'] = item
+
+    return jsonify(user_likes)
 
 @app.route("/api/active_drivers")
 def active_driver_data():
