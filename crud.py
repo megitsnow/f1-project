@@ -1,6 +1,6 @@
 """CRUD operations."""
 
-from model import db, User, Driver, Race, Constructor, Result, SprintResult, Like, connect_to_db
+from model import db, User, Driver, Race, Constructor, Result, SprintResult, Like, Circuit, connect_to_db
 
 def create_user(fname, lname, email, password):
     """Create and return a new user."""
@@ -137,6 +137,23 @@ def get_driver_by_id(id):
     """Return a user by email."""
 
     return Driver.query.filter(Driver.driver_id == id).first()
+
+def create_circuit(circuit_id,circuit_ref,name,location,country,lat,lng,alt,url):
+    """Create and return a circuit."""
+
+    circuit = Circuit(
+        circuit_id = circuit_id,
+        circuit_ref = circuit_ref,
+        name = name,
+        location = location,
+        country = country,
+        lat = lat,
+        lng = lng,
+        alt = alt,
+        url = url
+    )
+
+    return circuit
 
 if __name__ == "__main__":
     from server import app

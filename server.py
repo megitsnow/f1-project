@@ -3,6 +3,7 @@
 from flask import Flask, render_template, request, flash, session, redirect, jsonify
 from model import connect_to_db, db, Constructor, Driver, Race, Result, Like, User
 import json
+import cloudinary.uploader
 import crud
 import os
 import requests 
@@ -11,6 +12,9 @@ app = Flask(__name__)
 app.secret_key = "dev"
 
 API_KEY = os.environ["NEWS_API_KEY"]
+CLOUDINARY_KEY = os.environ["CLOUDINARY_API_KEY"]
+CLOUDINARY_SECRET = os.environ["CLOUDINARY_API_SECRET"]
+CLOUD_NAME = "dzqtjox0u"
 
 @app.route("/")
 def login():
@@ -206,6 +210,17 @@ def get_recent_articles():
         news_articles.append(article)
     
     return jsonify(news_articles)
+
+# @app.route("/api/cloudinary")
+# def handle_cloudinary():
+#     """Handle cloudinary"""
+
+#     picture = request.json.get("my-file")
+#     user_email = session["user_email"]
+#     user = crud.get_user_by_email(user_email)
+#     user.img = picture
+
+#     return jsonify(user.to_dict())
     
 
 

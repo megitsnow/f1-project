@@ -9,7 +9,7 @@ import sys
 import crud
 import model
 import server
-from parsed_data import driver_data, races, constructor_data, results, sprint_results, status
+from parsed_data import driver_data, races, constructor_data, results, sprint_results, status, circuits
 from model import Constructor, Driver
 
 
@@ -55,6 +55,26 @@ model.db.session.add_all(driver_in_db)
 model.db.session.commit()
 
 # Seed races table
+
+circuit_in_db = []
+
+for i in circuits.keys():
+    circuit_id,circuit_ref,name,location,country,lat,lng,alt,url = (
+        i,
+        circuits[i]["circuit_ref"],
+        circuits[i]["name"],
+        circuits[i]["location"],
+        circuits[i]["country"],
+        circuits[i]["lat"],
+        circuits[i]["lng"],
+        circuits[i]["alt"],
+        circuits[i]["url"],
+    )
+    db_circuit = crud.create_circuit(circuit_id,circuit_ref,name,location,country,lat,lng,alt,url)
+    circuit_in_db.append(db_circuit)
+
+model.db.session.add_all(circuit_in_db)
+model.db.session.commit()
 
 races_in_db = []
 
@@ -163,6 +183,7 @@ for i in sprint_results.keys():
 
     db_sprint_result = crud.create_sprint_result(result_id, race_id, driver_id, constructor_id ,number, grid, position, position_text, position_order, points, laps, time, milliseconds, fastest_lap, fastest_lap_time, status_id)
     sprint_result_in_db.append(db_sprint_result)
+
 
 # model.db.session.add_all(sprint_result_in_db)
 # model.db.session.commit()

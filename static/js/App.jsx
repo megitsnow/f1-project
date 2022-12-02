@@ -50,6 +50,7 @@ function App () {
             <ReactRouterDOM.Route exact path="/user-profile">
                 <UserInformation/>
                 <UserProfile/>
+                {/* <CloudinaryUpload/> */}
             </ReactRouterDOM.Route>
 
             <ReactRouterDOM.Route exact path="/drivers">

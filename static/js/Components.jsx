@@ -556,3 +556,45 @@ function IndividualUserInformation(props) {
     );
 }
 
+// function CloudinaryUpload(props) {
+//     const [picture, setPicture] = React.useState("")
+
+//     const handleChange = (event) => {
+//         console.log(picture)
+//         const {name, value} = event.target
+//         setPicture(prevPicture => ({
+//             ...prevPicture,
+//             [name]: value
+//         }))
+//         console.log(formData)
+//     }
+//     const handleSubmit = (event) => {
+//         event.preventDefault()
+//         fetch('/api/cloudinary', {
+//             method: 'POST',
+//             body: JSON.stringify(formData),
+//             headers: {
+//             'Content-Type': 'application/json',
+//             },
+//         })
+//             .then((response) => response.json())
+//             .then((responseJson) => {
+//             alert(responseJson.status);
+//             });
+//     }
+//     return (
+//         <div>
+//         <form className="form" onSubmit={handleSubmit}>
+//             <input 
+//                 type="file" 
+//                 placeholder="Upload Your Profile Picture"
+//                 name="my-file"
+//                 onChange={handleChange}
+//                 value={picture.my-file}
+//             />
+//             <input type = "submit"></input>
+//         </form>
+//     </div>
+//     );
+//     }
+

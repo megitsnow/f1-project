@@ -18,13 +18,15 @@ class User(db.Model):
     lname = password = db.Column(db.String)
     email = db.Column(db.String, unique=True)
     password = db.Column(db.String)
+    img = db.Column(db.String, nullable = True)
 
     def to_dict(self):
         return {'user_id': self.user_id,
                 'fname': self.fname,
                 'lname': self.lname,
                 'email': self.email,
-                'password': self.password}
+                'password': self.password,
+                'img': self.img}
 
     likes = db.relationship("Like", back_populates="user")
 
@@ -97,7 +99,7 @@ class Race(db.Model):
     race_id = db.Column(db.Integer, primary_key=True)
     year = db.Column(db.Integer)
     round = db.Column(db.Integer)
-    circuit_id = db.Column(db.Integer)
+    circuit_id = db.Column(db.Integer, db.ForeignKey("circuits.circuit_id"))
     name = db.Column(db.String(255))
     date = db.Column(db.String(255))
     time = db.Column(db.String(255)) 
@@ -115,6 +117,7 @@ class Race(db.Model):
 
     sprint_results = db.relationship("SprintResult", back_populates="race")
     results = db.relationship("Result", back_populates="race")
+    circuit = db.relationship("Circuit", back_populates="race")
 
 
     def __repr__(self):
@@ -207,6 +210,26 @@ class SprintResult(db.Model):
 
     def __repr__(self):
         return f"<SprintResult result_id={self.result_id} race_id={self.race_id}>"
+
+class Circuit(db.Model):
+    """Table for circuits"""
+
+    __tablename__ = "circuits"
+
+    circuit_id = db.Column(db.Integer, primary_key = True, nullable = False)
+    circuit_ref = db.Column(db.String(255), nullable = False)
+    name = db.Column(db.String(255), nullable = False)
+    location = db.Column(db.String(255), nullable = True)
+    country = db.Column(db.String(255), nullable = True)
+    lat = db.Column(db.String, nullable = True)
+    lng = db.Column(db.String, nullable = True)
+    alt = db.Column(db.String, nullable = True)
+    url = db.Column(db.String(255), nullable = False)
+
+    race = db.relationship("Race", back_populates="circuit")
+
+    def __repr__(self):
+        return f"<Circuit circuit_id={self.circuit_id} name={self.name}>"
 
 
 def connect_to_db(flask_app, db_uri="postgresql:///f1", echo=True):
